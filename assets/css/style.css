@@ -1,7 +1,7 @@
 h1, h3, h5 {
     text-align: center;
 }
-p, .profilePicture, .commentsExpérience {
+.levelStudy, .webLanguages, .profilePicture, .commentsExpérience {
     font-weight: bold;
 }
 .col-8 {
@@ -11,4 +11,50 @@ p, .profilePicture, .commentsExpérience {
     background-color: #AB7342;
     color: white;
     font-weight: bold;
+}
+
+/* erreur mail */
+#falseMail {
+    display:none;
+    color: red;
+}
+/* erreur nom */
+#falseLastname {
+    display:none;
+    color: red;
+}
+/* erreur date de naissance */
+#falseBirthDate {
+    display:none;
+    color: red;
+}
+/* erreur pays de naissance */
+#falseNativeCountry {
+    display:none;
+    color: red;
+}
+/* erreur code postal */
+#falsePostalCode {
+    display:none;
+    color: red;
+}
+/* erreur fichier */
+#falseProfilePicture {
+    display:none;
+    color: red;
+}
+/* erreur URL */
+#falseLinkedinUrl {
+    display:none;
+    color: red;
+}
+/* erreur URL */
+#falseCommentsExpérience {
+    display:none;
+    color: red;
+}
+/* erreur URL */
+#falseWebLanguages {
+    display:none;
+    color: red;
 }

@@ -26,14 +26,21 @@
                             <div class="form-floating mb-3">
                                 <input required type="mail" class="form-control" id="mail" name="mail" placeholder="E-mail">
                                 <label for="mail">E-mail</label>
+                                <!-- erreur mail -->
+                                <p id="falseMail">Votre mail comporte des erreurs</p>
+                                
                             </div>
                             <div class="form-floating mb-3">
                                 <input required type="text" class="form-control" id="lastname" name="lastname" placeholder="Nom">
                                 <label for="lastname">Nom</label>
+                                <!-- erreur nom -->
+                                <p id="falseLastname">Votre nom comporte des erreurs</p>
                             </div>
-                            <div class="form-floating mb-3 input-group">
+                            <div class="form-floating mb-3">
                                 <input required type="date" class="form-control" id="birthDate" name="birthDate" placeholder="Date de naissance">
                                 <label for="birthDate">Date de naissance</label>
+                                <!-- erreur date de naissance -->
+                                <p id="falseBirthDate">Votre date de naissance comporte des erreurs</p>
                             </div>
                             <div class="form-floating mb-3">
                                 <select class="form-select" name="nativeCountry" id="nativeCountry" aria-label="nativeCountryLabel">
@@ -43,18 +50,24 @@
                                     <option value="3">Royaume-Uni</option>
                                 </select>
                                 <label for="nativeCountry">Pays de naissance</label>
+                                <!-- erreur pays de naissance -->
+                                <p id="falseNativeCountry">Votre pays de naissance comporte des erreurs</p>
                             </div>
                             <div class="form-floating mb-3">
                                 <input required type="text" class="form-control" id="postalCode" name="postalCode" placeholder="Code Postal">
                                 <label for="postalCode">Code Postal</label>
+                                <!-- erreur code postal -->
+                                <p id="falsePostalCode">Votre code postal comporte des erreurs</p>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label profilePicture" for="profilePicture">Photo de profil :</label>
                                 <input required required type="file" name="profilePicture" class="form-control" id="profilePicture">
+                                <!-- erreur fichier -->
+                                <p id="falseProfilePicture">Votre fichier comporte des erreurs</p>
                             </div>
                         </div>
                         <div class="col-12 col-lg-6 pt-3 px-lg-5">
-                            <p>Niveau d'études</p>
+                            <p class="levelStudy">Niveau d'études</p>
                             <div class="row">
                                 <div class="col-12 col-lg-4">
                                     <div class="form-check form-check-inline mb-3">
@@ -86,39 +99,45 @@
                             <div class="form-floating mb-3">
                                 <input required type="url" class="form-control" id="linkedinUrl" name="linkedinUrl" placeholder="URL du compte LinkedIn">
                                 <label for="linkedinUrl">URL du compte LinkedIn</label>
+                                <!-- erreur URL -->
+                                <p id="falseLinkedinUrl">Votre URL comporte des erreurs</p>
                             </div>
-                            <p>Quel langage Web connaissez-vous ?</p>
+                            <p class="webLanguages">Quel langage Web connaissez-vous ?</p>
                             <div class="row">
                                 <div class="col-12 col-lg-4">
                                     <div class="form-check form-check-inline mb-3">
-                                        <input class="form-check-input" type="checkbox" name="htmlCsswebLanguages" id="htmlCsswebLanguages">
-                                        <label class="form-check-label" for="htmlCsswebLanguages">Html/Css</label>
+                                        <input class="form-check-input" type="checkbox" name="webLanguages" id="htmlCssWebLanguages" value="Html/Css">
+                                        <label class="form-check-label" for="htmlCssWebLanguages">Html/Css</label>
                                     </div>
                                     <div class="form-check form-check-inline mb-3">
-                                        <input class="form-check-input" type="checkbox" name="phpwebLanguages" id="phpwebLanguages">
-                                        <label class="form-check-label" for="phpwebLanguages">PHP</label>
+                                        <input class="form-check-input" type="checkbox" name="webLanguages" id="phpWebLanguages" value="PHP">
+                                        <label class="form-check-label" for="phpWebLanguages">PHP</label>
                                     </div>
                                 </div>
                                 <div class="col-12 col-lg-4">
                                     <div class="form-check form-check-inline mb-3">
-                                        <input class="form-check-input" type="checkbox" name="javascriptwebLanguages" id="javascriptwebLanguages">
-                                        <label class="form-check-label" for="javascriptwebLanguages">Javascript</label>
+                                        <input class="form-check-input" type="checkbox" name="webLanguages" id="javascriptWebLanguages" value="Javascript">
+                                        <label class="form-check-label" for="javascriptWebLanguages">Javascript</label>
                                     </div>
                                     <div class="form-check form-check-inline mb-3">
-                                        <input class="form-check-input" type="checkbox" name="pythonwebLanguages" id="pythonwebLanguages">
-                                        <label class="form-check-label" for="pythonwebLanguages">Python</label>
+                                        <input class="form-check-input" type="checkbox" name="webLanguages" id="pythonWebLanguages" value="Python">
+                                        <label class="form-check-label" for="pythonWebLanguages">Python</label>
                                     </div>
                                 </div>
                                 <div class="col-12 col-lg-4">
                                     <div class="form-check form-check-inline mb-3">
-                                        <input class="form-check-input" type="checkbox" name="otherwebLanguages" id="otherwebLanguages">
-                                        <label class="form-check-label" for="otherwebLanguages">Autres</label>
+                                        <input class="form-check-input" type="checkbox" name="webLanguages" id="otherWebLanguages" value="Autres">
+                                        <label class="form-check-label" for="otherWebLanguages">Autres</label>
                                     </div>
                                 </div>
+                                <!-- erreur langage(s) connu(s) -->
+                                <p id="falseWebLanguages">Votre choix comporte des erreurs</p>
                             </div>
                             <div class="mb-3">
                                 <label for="commentsExpérience" class="commentsExpérience">Avez vous déjà eu une expérience dans la programmation et/ou l'informatique avant de remplir ce formulaire ?</label>
-                                <textarea class="form-control" placeholder="Précisez" id="commentsExpérience"></textarea>
+                                <textarea required class="form-control" placeholder="Précisez" id="commentsExpérience"></textarea>
+                                <!-- erreur commentaire -->
+                                <p id="falseCommentsExpérience">Votre commentaire comporte des erreurs</p>
                             </div>
                         </div>
                     </div>
@@ -131,5 +150,6 @@
             </div>
         </div>
     </div>
+    <script src="../assets/js/script.js"></script>
 </body>
 </html>
