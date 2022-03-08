@@ -1,0 +1,14 @@
+h1, h3, h5 {
+    text-align: center;
+}
+p, .profilePicture {
+    font-weight: bold;
+}
+.col-8 {
+    border: 0.3rem solid #AB7342;
+}
+.btn {
+    background-color: #AB7342;
+    color: white;
+    font-weight: bold;
+}
