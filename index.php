@@ -24,44 +24,67 @@
                     <div class="row">
                         <div class="col-12 col-lg-6 pt-3 px-lg-5">
                             <div class="form-floating mb-3">
-                                <input type="mail" class="form-control" id="mail" name="mail" placeholder="E-mail">
+                                <input required type="mail" class="form-control" id="mail" name="mail" placeholder="E-mail">
                                 <label for="mail">E-mail</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Nom">
+                                <input required type="text" class="form-control" id="lastname" name="lastname" placeholder="Nom">
                                 <label for="lastname">Nom</label>
                             </div>
                             <div class="form-floating mb-3 input-group">
-                                <input type="date" class="form-control" id="birthDate" name="birthDate" placeholder="Date de naissance">
+                                <input required type="date" class="form-control" id="birthDate" name="birthDate" placeholder="Date de naissance">
                                 <label for="birthDate">Date de naissance</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="nativeCountry" name="nativeCountry" placeholder="Pays de naissance">
+                                <select class="form-select" name="nativeCountry" id="nativeCountry" aria-label="nativeCountryLabel">
+                                    <option selected>Sélectionnez un pays</option>
+                                    <option value="1">France</option>
+                                    <option value="2">Allemagne</option>
+                                    <option value="3">Royaume-Uni</option>
+                                </select>
                                 <label for="nativeCountry">Pays de naissance</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="Code Postal">
+                                <input required type="text" class="form-control" id="postalCode" name="postalCode" placeholder="Code Postal">
                                 <label for="postalCode">Code Postal</label>
                             </div>
-                            <div class="form-floating mb-3">
-                                <select class="form-select" id="levelStudy" name="levelStudy" aria-label="levelStudyLabel">
-                                    <option selected>Choisissez un niveau</option>
-                                    <option value="1">sans</option>
-                                    <option value="2">Bac</option>
-                                    <option value="3">Bac+2</option>
-                                    <option value="4">Bac+3</option>
-                                    <option value="5">supérieur</option>
-                                </select>
-                                <label for="levelStudy">Niveau d'études</label>
+                            <div class="mb-3">
+                                <label class="form-label profilePicture" for="profilePicture">Photo de profil :</label>
+                                <input required required type="file" name="profilePicture" class="form-control" id="profilePicture">
                             </div>
                         </div>
                         <div class="col-12 col-lg-6 pt-3 px-lg-5">
-                            <div class="mb-3">
-                                <label class="form-label profilePicture" for="profilePicture">Photo de profil :</label>
-                                <input required type="file" name="profilePicture" class="form-control" id="profilePicture">
+                            <p>Niveau d'études</p>
+                            <div class="row">
+                                <div class="col-12 col-lg-4">
+                                    <div class="form-check form-check-inline mb-3">
+                                        <input class="form-check-input" type="radio" name="levelStudy" id="withoutLevelStudy" value="sans">
+                                        <label class="form-check-label" for="withoutLevelStudy">sans</label>
+                                    </div>
+                                    <div class="form-check form-check-inline mb-3">
+                                        <input class="form-check-input" type="radio" name="levelStudy" id="bacLevelStudy" value="Bac">
+                                        <label class="form-check-label" for="yeslevelStudy">Bac</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <div class="form-check form-check-inline mb-3">
+                                        <input class="form-check-input" type="radio" name="levelStudy" id="twoBacLevelStudy" value="Bac+2">
+                                        <label class="form-check-label" for="yeslevelStudy">Bac+2</label>
+                                    </div>
+                                    <div class="form-check form-check-inline mb-3">
+                                        <input class="form-check-input" type="radio" name="levelStudy" id="threeBacLevelStudy" value="Bac+3">
+                                        <label class="form-check-label" for="threeBacLevelStudy">Bac+3</label>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-lg-4">
+                                    <div class="form-check form-check-inline mb-3">
+                                        <input class="form-check-input" type="radio" name="levelStudy" id="supLevelStudy" value="supérieur" checked>
+                                        <label class="form-check-label" for="supLevelStudy">supérieur</label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="linkedinUrl" name="linkedinUrl" placeholder="URL du compte LinkedIn">
+                                <input required type="url" class="form-control" id="linkedinUrl" name="linkedinUrl" placeholder="URL du compte LinkedIn">
                                 <label for="linkedinUrl">URL du compte LinkedIn</label>
                             </div>
                             <p>Quel langage Web connaissez-vous ?</p>
@@ -93,14 +116,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <p>Avez vous déjà eu une expérience dans la programmation et/ou l'informatique avant de remplir ce formulaire ?</p>
-                            <div class="form-check form-check-inline mb-3">
-                                <input class="form-check-input" type="radio" name="yesNoExperience" id="yesExperience" value="Oui">
-                                <label class="form-check-label" for="yesExperience">Oui</label>
-                            </div>
-                            <div class="form-check form-check-inline mb-3">
-                                <input class="form-check-input" type="radio" name="yesNoExperience" id="noExperience" value="Non" checked>
-                                <label class="form-check-label" for="noExperience">Non</label>
+                            <div class="mb-3">
+                                <label for="commentsExpérience" class="commentsExpérience">Avez vous déjà eu une expérience dans la programmation et/ou l'informatique avant de remplir ce formulaire ?</label>
+                                <textarea class="form-control" placeholder="Précisez" id="commentsExpérience"></textarea>
                             </div>
                         </div>
                     </div>
