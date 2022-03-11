@@ -12,11 +12,11 @@
 
     $urlCompare1 = parse_url('https://www.linkedin.com/in/');
 
-// Déclaration d'une constante tableau
-    define('CONSTANT_REGEX', [
-        'fullChars' => "^[A-Za-àáâãäçèéêëìíîïñòóôõöùûúüýÿ'\-]+$"
-    ]);
-    
+// Déclaration des constantes
+    define('CONSTANT_REGEX_FULL_CHARS', "^[A-Za-àáâãäçèéêëìíîïñòóôõöùûúüýÿ'\-]+$");
+    define('CONSTANT_REGEX_POSTAL_CODE', "^\d{5}$");
+    define('CONSTANT_REGEX_DATE', "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$");
+
 // Déclarations Variables Tableaux
     $countriesArray = [
         'Albanie', 'Allemagne', 'Arménie', 'Autriche', 'Azerbaïdjan', 'Belgique', 'Bosnie-Herzégovine', 'Bulgarie', 'Canada', 'Chypre', 'Croatie', 'Danemark',
@@ -32,8 +32,6 @@
     $webLanguagesArray = ['htmlCss' => 'Html/Css', 'php' => 'PHP', 'javascript' => 'Javascript', 'python' => 'Python', 'autres' => 'Autres'];
     
     $extensionArray = ['jpeg', 'jpg', 'png', 'avif', 'gif'];
-    
-    $error = [];
 
 // Condition si le formulaire a été envoyé
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -54,7 +52,7 @@
         if (empty($lastname)) {
             $error['lastname'] = 'Veuillez entrer votre nom';
         } else {
-            $lastnameChecked = filter_var($lastname, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[A-Za-àáâãäçèéêëìíîïñòóôõöùûúüýÿ'\-]+$/")));
+            $lastnameChecked = filter_var($lastname, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>'/'.CONSTANT_REGEX_FULL_CHARS.'/')));
             if ($lastnameChecked === false) {
                 $error['lastname'] = 'Votre nom comporte des erreurs';
             };
@@ -65,7 +63,7 @@
         if (empty($birthDate)) {
             $error['birthDate'] = 'Veuillez choisir une date';
         } else {
-            $birthDateChecked = filter_var($birthDate, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/")));
+            $birthDateChecked = filter_var($birthDate, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>'/'.CONSTANT_REGEX_DATE.'/')));
             if ($birthDateChecked === false || $birthDate < $startDay || $birthDate > $todayDay) {
                 $error['birthDate'] = 'Votre date d\'anniversaire comporte des erreurs';
             };
@@ -87,7 +85,7 @@
         if (empty($postalCode)) {
             $error['postalCode'] = 'Veuillez entrer votre code postal';
         } else {
-            $postalCodeChecked = filter_var($postalCode, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^\d{5}$/")));
+            $postalCodeChecked = filter_var($postalCode, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>'/'.CONSTANT_REGEX_POSTAL_CODE.'/')));
             if ($postalCodeChecked === false) {
                 $error['postalCode'] = 'Votre code postal comporte des erreurs';
             };
@@ -141,11 +139,6 @@
         $commentsExpérience = filter_input(INPUT_POST, 'commentsExpérience', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         if (empty($commentsExpérience)) {
             $error['commentsExpérience'] = 'Veuillez saisir un commentaire';
-        } else {
-            $commentsExpérienceChecked = filter_var($commentsExpérience, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[A-Za-àáâãäçèéêëìíîïñòóôõöùûúüýÿ'\-]+$/")));
-            if ($commentsExpérienceChecked === false) {
-                $error['commentsExpérience'] = 'Le commentaire saisi comporte des erreurs';
-            };
         };
     };
 ?> 
@@ -173,9 +166,11 @@
         <div class="row justify-content-center">
             <div class="col-8 mb-5">
             <?php if ($_SERVER['REQUEST_METHOD'] != 'POST' || !empty($error) ) { ?>
+                <!---------- Formulaire ---------->
                 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" enctype='multipart/form-data' novalidate>
-                    <div class="row">
-                        <div class="col-12 col-lg-6 pt-3 px-lg-5">
+                    <div class="row py-3">
+                        <div class="col-12 col-lg-6 pt-3 px-lg-5 colLeft">
+                            <!-- Formulaire : E-mail -->
                             <div class="form-floating mb-3">
                                 <input type="email" class="form-control" id="mail" name="mail" placeholder="E-mail" value="<?= $mail ?? ''; ?>" autocomplete="email" required>
                                 <label for="mail">E-mail *</label>
@@ -183,15 +178,15 @@
                             <p class="error">
                                 <?=  $error['mail'] ?? '' ?>
                             </p>
-
+                            <!-- Formulaire : Nom -->
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Nom" required pattern="^[A-Za-àáâãäçèéêëìíîïñòóôõöùûúüýÿ'\-]+$" value="<?= $lastname ?? ''; ?>" autocomplete="name">
+                                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Nom" required pattern="<?= CONSTANT_REGEX_FULL_CHARS; ?>" value="<?= $lastname ?? ''; ?>" autocomplete="name">
                                 <label for="lastname">Nom *</label>
                             </div>
                             <p class="error">
                                 <?=  $error['lastname'] ?? '' ?>
                             </p>
-
+                            <!-- Formulaire : Date de naissance -->
                             <div class="form-floating mb-3">
                                 <input type="date" class="form-control" id="birthDate" name="birthDate" placeholder="Date de naissance" min="<?=$startDay?>" max="<?= $todayDay; ?>" value="<?= $birthDate ?? ''; ?>" required>
                                 <label for="birthDate">Date de naissance *</label>
@@ -199,7 +194,7 @@
                             <p class="error">
                                 <?=  $error['birthDate'] ?? '' ?>
                             </p>
-
+                            <!-- Formulaire : Pays de naissance -->
                             <div class="form-floating mb-3">
                                 <select class="form-select" name="nativeCountry" id="nativeCountry" aria-label="nativeCountryLabel" value="<?= $nativeCountry ?? ''; ?>" required>
                                     <option>Choisissez un pays</option>
@@ -222,15 +217,15 @@
                             <p class="error">
                                 <?=  $error['nativeCountry'] ?? '' ?>
                             </p>
-
+                            <!-- Formulaire : Code postal -->
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="Code Postal" required size="5" pattern="[0-9]+" value="<?= $postalCode ?? ''; ?>" autocomplete="postal-code">
+                                <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="Code Postal" required size="5" pattern="<?= CONSTANT_REGEX_POSTAL_CODE; ?> value="<?= $postalCode ?? ''; ?>" autocomplete="postal-code">
                                 <label for="postalCode">Code Postal *</label>
                             </div>
                             <div class="error">
                                 <?=  $error['postalCode'] ?? '' ?>
                             </div>
-
+                            <!-- Formulaire : Photo de profil -->
                             <div class="mb-3">
                                 <label class="form-label profilePicture" for="profilePicture">Photo de profil :</label>
                                 <input type="file" name="profilePicture" class="form-control" id="profilePicture">
@@ -238,9 +233,9 @@
                             <p class="error">
                             <?= $error['profilePicture'] ?? '' ?>
                             </p>
-
                         </div>
-                        <div class="col-12 col-lg-6 pt-3 px-lg-5">
+                        <div class="col-12 col-lg-6 pt-3 px-lg-5 colRight">
+                            <!-- Formulaire : Niveau d'études -->
                             <p class="levelStudy">Niveau d'études *</p>
                             <?php
                                 foreach ($levelStudyArray as $levelStudyKey => $levelStudyValue) {
@@ -261,8 +256,7 @@
                             <p class="error">
                                 <?=  $error['levelStudy'] ?? '' ?>
                             </p>
-                            
-
+                            <!-- Formulaire : Compte LinkedIn -->
                             <div class="form-floating mb-3">
                                 <input type="url" class="form-control" id="linkedinUrl" name="linkedinUrl" placeholder="URL du compte LinkedIn" value="<?= $linkedinUrl ?? ''; ?>">
                                 <label for="linkedinUrl">URL du compte LinkedIn</label>
@@ -270,7 +264,7 @@
                             <p class="error">
                                 <?=  $error['linkedinUrl'] ?? '' ?>
                             </p>
-
+                            <!-- Formulaire : Langage(s) web connu(s) -->
                             <p class="webLanguages">Quel langage Web connaissez-vous ?</p>
                             <?php
                                 foreach ($webLanguagesArray as $webLanguageKey => $webLanguageValue) {
@@ -291,7 +285,7 @@
                             <p class="error">
                                 <?=  $error['webLanguages'] ?? '' ?>
                             </p>
-
+                            <!-- Formulaire : Expérience -->
                             <div class="mb-3">
                                 <label for="commentsExpérience" class="commentsExpérience">Avez vous déjà eu une expérience dans la programmation et/ou l'informatique avant de remplir ce formulaire ? *</label>
                                 <textarea class="form-control" placeholder="Précisez" name="commentsExpérience" id="commentsExpérience" required><?= $commentsExpérience ?? ''; ?></textarea>
@@ -299,7 +293,6 @@
                             <p class="error">
                             <?=  $error['commentsExpérience'] ?? '' ?>
                             </p>
-
                         </div>
                     </div>
                     <div class="row">
@@ -312,20 +305,21 @@
                     </div>
                 </form>
                 <?php } else { ?>
-                <p><?= $mail; ?></p>
-                <p><?= $lastname; ?></p>
-                <p><?= $birthDate; ?></p>
-                <p><?= $nativeCountry; ?></p>
-                <p><?= $postalCode; ?></p>
-                <p><?= $profilePicture; ?></p>
-                <p><?= $levelStudy; ?></p>
-                <p><?= $linkedinUrl; ?></p>
-                <p><?php
+                <!-- Retour si Formulaire correctement rempli -->
+                <p>Adresse E-mail : <?= $mail; ?></p>
+                <p>Nom : <?= $lastname; ?></p>
+                <p>Date de naissance : <?= $birthDate; ?></p>
+                <p>Pays de naissance : <?= $nativeCountry; ?></p>
+                <p>Code postal : <?= $postalCode; ?></p>
+                <p>Photo de profil : <?= $profilePicture ?? 'Non indiqué'; ?></p>
+                <p>Niveau d'études : <?= $levelStudy; ?></p>
+                <p>Compte LinkedIn : <?= $linkedinUrl ?? 'Non indiqué'; ?></p>
+                <p>Langage(s) web connu(s) : <?php
                     foreach ($webLanguages as $webLanguagesKey => $webLanguagesValue) { 
-                        echo $webLanguagesValue.', ';
+                        echo $webLanguagesValue.', ' ?? 'Non indiqué';
                     };
                 ?></p>
-                <?= $commentsExpérience; ?></p>
+                <p>Expérience : <?= $commentsExpérience; ?></p>
                 <?php }; ?>
             </div>
         </div>
