@@ -11,6 +11,11 @@
     $startDay = $dateStart -> format('Y-m-d');
 
     $urlCompare1 = parse_url('https://www.linkedin.com/in/');
+
+// Déclaration d'une constante tableau
+    define('CONSTANT_REGEX', [
+        'fullChars' => "^[A-Za-àáâãäçèéêëìíîïñòóôõöùûúüýÿ'\-]+$"
+    ]);
     
 // Déclarations Variables Tableaux
     $countriesArray = [
@@ -61,7 +66,7 @@
             $error['birthDate'] = 'Veuillez choisir une date';
         } else {
             $birthDateChecked = filter_var($birthDate, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/")));
-            if ($birthDateChecked === false || $birthDateChecked < $startDay || $birthDateChecked > $todayDay) {
+            if ($birthDateChecked === false || $birthDate < $startDay || $birthDate > $todayDay) {
                 $error['birthDate'] = 'Votre date d\'anniversaire comporte des erreurs';
             };
         };
@@ -95,12 +100,11 @@
             $extension = strtolower($fileInfo['extension']);
             $extensionChecked = in_array($extension, $extensionArray);
             if($extensionChecked === false){
-                $error['profilePictureName'] = 'Le fichier transféré n\'est pas un jpeg';
+                $error['profilePicture'] = 'Le fichier transféré n\'est pas un jpeg';
             } else {
-                move_uploaded_file($_FILES['profilePicture']['tmp_name'], '../uploads/' . $lastname.$birthDate.'.'.$extension);
+                move_uploaded_file($_FILES['profilePicture']['tmp_name'], 'uploads/' . $lastname.'-'.$birthDate.'.'.$extension);
+                $profilePicture = 'Le fichier a été transféré avec succès';
             };
-        } else {
-            $error['profilePictureName'] = 'Vous n\'avez pas transféré de fichier';
         };
 
 // Vérificafion niveau études
@@ -204,7 +208,7 @@
                                 ?>
                                     <option
                                     <?php
-                                        if($countrieValue == $nativeCountry || empty($nativeCountry)) {
+                                        if(!empty($nativeCountry) && ($countrieValue == $nativeCountry)) {
                                             echo 'selected="selected"';
                                         };
                                     ?>
@@ -244,7 +248,7 @@
                             <div class="form-check form-check-inline mb-3">
                                 <input class="form-check-input" type="radio" name="levelStudy" id="<?= $levelStudyKey; ?>LevelStudy"  value="<?= $levelStudy ?? $levelStudyValue; ?>"
                                 <?php
-                                    if($levelStudyValue == $levelStudy || empty($levelStudy)) {
+                                    if(!empty($levelStudy) && ($levelStudyValue == $levelStudy)) {
                                         echo 'checked="checked"';
                                     };
                                 ?>
@@ -272,7 +276,13 @@
                                 foreach ($webLanguagesArray as $webLanguageKey => $webLanguageValue) {
                             ?>
                             <div class="form-check form-check-inline mb-3">
-                                <input class="form-check-input" type="checkbox" name="webLanguages[]" id="<?= $webLanguageKey; ?>WebLanguages"  value="<?= $webLanguage ?? $webLanguageValue; ?>">
+                                <input class="form-check-input" type="checkbox" name="webLanguages[]" id="<?= $webLanguageKey; ?>WebLanguages"  value="<?= $webLanguage ?? $webLanguageValue; ?>"
+                                <?php
+                                    if(!empty($webLanguages) && (in_array($webLanguageValue, $webLanguages))) {
+                                        echo 'checked="checked"';
+                                    };
+                                ?>
+                                >
                                 <label class="form-check-label" for="<?= $webLanguageKey; ?>WebLanguages"><?= $webLanguageValue; ?></label>
                             </div>
                             <?php
@@ -284,7 +294,7 @@
 
                             <div class="mb-3">
                                 <label for="commentsExpérience" class="commentsExpérience">Avez vous déjà eu une expérience dans la programmation et/ou l'informatique avant de remplir ce formulaire ? *</label>
-                                <textarea class="form-control" placeholder="Précisez" name="commentsExpérience" id="commentsExpérience" value="<?= $commentsExpérience ?? ''; ?>" required></textarea>
+                                <textarea class="form-control" placeholder="Précisez" name="commentsExpérience" id="commentsExpérience" required><?= $commentsExpérience ?? ''; ?></textarea>
                             </div>
                             <p class="error">
                             <?=  $error['commentsExpérience'] ?? '' ?>
@@ -302,15 +312,20 @@
                     </div>
                 </form>
                 <?php } else { ?>
-                <p><?php $mail; ?></p>
-                <p><?php $lastname; ?></p>
-                <p><?php $birthDate; ?></p>
-                <p><?php $nativeCountry; ?></p>
-                <p><?php $postalCode; ?></p>
-                <p><?= 'Le fichier a été enregistré avec succès' ?></p>
-                <p><?php $levelStudy; ?></p>
-                <p><?php $linkedinUrl; ?></p>
-                <p><?php $webLanguages; ?></p>
+                <p><?= $mail; ?></p>
+                <p><?= $lastname; ?></p>
+                <p><?= $birthDate; ?></p>
+                <p><?= $nativeCountry; ?></p>
+                <p><?= $postalCode; ?></p>
+                <p><?= $profilePicture; ?></p>
+                <p><?= $levelStudy; ?></p>
+                <p><?= $linkedinUrl; ?></p>
+                <p><?php
+                    foreach ($webLanguages as $webLanguagesKey => $webLanguagesValue) { 
+                        echo $webLanguagesValue.', ';
+                    };
+                ?></p>
+                <?= $commentsExpérience; ?></p>
                 <?php }; ?>
             </div>
         </div>
