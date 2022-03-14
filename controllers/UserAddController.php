@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__).'/../config/regex.php');
+require_once(dirname(__FILE__).'/../config/init.php');
 // Déclaration Variables
     $dateToday = new DateTime();
     $todayDay = $dateToday -> format('Y-m-d');
@@ -11,29 +12,12 @@ require_once(dirname(__FILE__).'/../config/regex.php');
     $dateStart = new DateTime("$startYear-$actualMonth-$actualday");
     $startDay = $dateStart -> format('Y-m-d');
 
-    $urlCompare1 = parse_url('https://www.linkedin.com/in/');
-
-// Déclarations Variables Tableaux
-    $countriesArray = [
-        'Albanie', 'Allemagne', 'Arménie', 'Autriche', 'Azerbaïdjan', 'Belgique', 'Bosnie-Herzégovine', 'Bulgarie', 'Canada', 'Chypre', 'Croatie', 'Danemark',
-        'Espagne', 'Estonie', 'Etats-Unis', 'Finlande', 'France', 'Géorgie', 'Grèce', 'Hongrie', 'Irlande', 'Islande', 'Ukraine', 'Algérie', 'Israël', 'Egypte',
-        'Italie', 'Lettonie', 'Lituanie', 'Luxembourg', 'Malte' , 'Macédoine du Nord', 'Monténégro', 'Pays-Bas', 'Pologne', 'Jordanie', 'Maroc', 'Australie',
-        'Tchéquie', 'Turquie', 'République de Moldova', 'République Tchèque', 'Roumanie', 'Royaume-Uni', 'Serbie', 'Slovaquie', 'Slovénie', 'Suède', 'Suisse',
-        'Japon', 'Kazakhstan', 'Corée du Sud', 'Tunisie', 'Kosovo'
-    ];
-    sort($countriesArray);
-
-    $levelStudyArray = ['without' => 'sans','bac' => 'Bac', 'twoBac' => 'Bac+2', 'threeBac' => 'Bac+3', 'sup' => 'supérieur'];
-
-    $webLanguagesArray = ['htmlCss' => 'Html/Css', 'php' => 'PHP', 'javascript' => 'Javascript', 'python' => 'Python', 'autres' => 'Autres'];
-    
-    $extensionArray = ['jpeg', 'jpg', 'png', 'avif', 'gif'];
-
     $error = [];
 
 // Condition si le formulaire a été envoyé
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        
+        $urlCompare1 = parse_url('https://www.linkedin.com/in/');
+
 // Vérification mail
         $mail = trim(filter_input(INPUT_POST, 'mail', FILTER_SANITIZE_EMAIL));
         if (empty($mail)) {
@@ -72,7 +56,7 @@ require_once(dirname(__FILE__).'/../config/regex.php');
         if (empty($nativeCountry)) {
             $error['nativeCountry'] = 'Veuillez choisir un pays';
         } else {
-            $nativeCountryChecked = in_array($nativeCountry, $countriesArray);
+            $nativeCountryChecked = in_array($nativeCountry, CONSTANT_ARRAY_COUNTRIES);
             if ($nativeCountryChecked === false) {
                 $error['nativeCountry'] = 'Votre pays de naissance comporte des erreurs';
             };
@@ -94,7 +78,7 @@ require_once(dirname(__FILE__).'/../config/regex.php');
             $profilePictureName = $_FILES['profilePicture']['name'];
             $fileInfo = pathinfo($_FILES['profilePicture']['name']);
             $extension = strtolower($fileInfo['extension']);
-            $extensionChecked = in_array($extension, $extensionArray);
+            $extensionChecked = in_array($extension, CONSTANT_ARRAY_EXTENSION);
             if($extensionChecked === false){
                 $error['profilePicture'] = 'Le fichier transféré n\'est pas un fichier de type image';
             } else {
@@ -108,7 +92,7 @@ require_once(dirname(__FILE__).'/../config/regex.php');
         if (empty($levelStudy)) {
             $error['levelStudy'] = 'Veuillez choisir un niveau';
         } else {
-            $levelStudyChecked = in_array($levelStudy, $levelStudyArray);
+            $levelStudyChecked = in_array($levelStudy, CONSTANT_ARRAY_LEVEL_STUDY);
             if ($levelStudyChecked === false) {
                 $error['levelStudy'] = 'Le niveau choisi comporte des erreurs';
             };
@@ -127,7 +111,7 @@ require_once(dirname(__FILE__).'/../config/regex.php');
 // Vérification langage web
         $webLanguages = filter_input(INPUT_POST, 'webLanguages', FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY);
         if (!empty($webLanguages)) {
-            $webLanguagesChecked = array_diff($webLanguages, $webLanguagesArray);
+            $webLanguagesChecked = array_diff($webLanguages, CONSTANT_ARRAY_WEB_LANGUAGES);
             if ($webLanguagesChecked != NULL) {
                 $error['webLanguages'] = 'Le langage choisi comporte des erreurs';
             };
