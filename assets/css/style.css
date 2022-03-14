@@ -21,3 +21,9 @@ h1, h3, h5 {
 .error{
     color: red;
 }
+input:not(:focus):not(:placeholder-shown):valid {
+    border: 0.1rem solid #CED4DA;
+}
+input:not(:focus):not(:placeholder-shown):invalid, .invalidInput {
+    border: 0.1rem solid red;
+}

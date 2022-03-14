@@ -1,4 +1,5 @@
 <?php
+require('regex.php');
 // Déclaration Variables
     $dateToday = new DateTime();
     $todayDay = $dateToday -> format('Y-m-d');
@@ -11,11 +12,6 @@
     $startDay = $dateStart -> format('Y-m-d');
 
     $urlCompare1 = parse_url('https://www.linkedin.com/in/');
-
-// Déclaration des constantes
-    define('CONSTANT_REGEX_FULL_CHARS', "^[A-Za-àáâãäçèéêëìíîïñòóôõöùûúüýÿ'\-]+$");
-    define('CONSTANT_REGEX_POSTAL_CODE', "^\d{5}$");
-    define('CONSTANT_REGEX_DATE', "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$");
 
 // Déclarations Variables Tableaux
     $countriesArray = [
@@ -32,6 +28,8 @@
     $webLanguagesArray = ['htmlCss' => 'Html/Css', 'php' => 'PHP', 'javascript' => 'Javascript', 'python' => 'Python', 'autres' => 'Autres'];
     
     $extensionArray = ['jpeg', 'jpg', 'png', 'avif', 'gif'];
+
+    $error = [];
 
 // Condition si le formulaire a été envoyé
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -136,9 +134,9 @@
         };
 
 // Vérification commentaire
-        $commentsExpérience = filter_input(INPUT_POST, 'commentsExpérience', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        if (empty($commentsExpérience)) {
-            $error['commentsExpérience'] = 'Veuillez saisir un commentaire';
+        $commentsExperience = filter_input(INPUT_POST, 'commentsExperience', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        if (empty($commentsExperience)) {
+            $error['commentsExperience'] = 'Veuillez saisir un commentaire';
         };
     };
 ?> 
@@ -150,7 +148,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
     <title>Formulaire d'inscription</title>
 </head>
 <body>
@@ -167,12 +165,18 @@
             <div class="col-8 mb-5">
             <?php if ($_SERVER['REQUEST_METHOD'] != 'POST' || !empty($error) ) { ?>
                 <!---------- Formulaire ---------->
-                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" enctype='multipart/form-data' novalidate>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" enctype='multipart/form-data'>
                     <div class="row py-3">
                         <div class="col-12 col-lg-6 pt-3 px-lg-5 colLeft">
                             <!-- Formulaire : E-mail -->
                             <div class="form-floating mb-3">
-                                <input type="email" class="form-control" id="mail" name="mail" placeholder="E-mail" value="<?= $mail ?? ''; ?>" autocomplete="email" required>
+                                <input type="email" class="form-control
+                                <?php
+                                    if(!empty($error['mail'])) {
+                                        echo 'invalidInput';
+                                    };
+                                ?>" 
+                                id="mail" name="mail" placeholder="E-mail" value="<?= $mail ?? ''; ?>" autocomplete="email" required>
                                 <label for="mail">E-mail *</label>
                             </div>
                             <p class="error">
@@ -180,7 +184,13 @@
                             </p>
                             <!-- Formulaire : Nom -->
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Nom" required pattern="<?= CONSTANT_REGEX_FULL_CHARS; ?>" value="<?= $lastname ?? ''; ?>" autocomplete="name">
+                                <input type="text" class="form-control
+                                <?php
+                                    if(!empty($error['lastname'])) {
+                                        echo 'invalidInput';
+                                    };
+                                ?>"  
+                                id="lastname" name="lastname" placeholder="Nom" required pattern="<?= CONSTANT_REGEX_FULL_CHARS; ?>" value="<?= $lastname ?? ''; ?>" autocomplete="name">
                                 <label for="lastname">Nom *</label>
                             </div>
                             <p class="error">
@@ -188,7 +198,13 @@
                             </p>
                             <!-- Formulaire : Date de naissance -->
                             <div class="form-floating mb-3">
-                                <input type="date" class="form-control" id="birthDate" name="birthDate" placeholder="Date de naissance" min="<?=$startDay?>" max="<?= $todayDay; ?>" value="<?= $birthDate ?? ''; ?>" required>
+                                <input type="date" class="form-control
+                                <?php
+                                    if(!empty($error['birthDate'])) {
+                                        echo 'invalidInput';
+                                    };
+                                ?>" 
+                                id="birthDate" name="birthDate" placeholder="Date de naissance" min="<?=$startDay?>" max="<?= $todayDay; ?>" value="<?= $birthDate ?? ''; ?>">
                                 <label for="birthDate">Date de naissance *</label>
                             </div>
                             <p class="error">
@@ -196,7 +212,13 @@
                             </p>
                             <!-- Formulaire : Pays de naissance -->
                             <div class="form-floating mb-3">
-                                <select class="form-select" name="nativeCountry" id="nativeCountry" aria-label="nativeCountryLabel" value="<?= $nativeCountry ?? ''; ?>" required>
+                                <select class="form-select
+                                <?php
+                                    if(!empty($error['nativeCountry'])) {
+                                        echo 'invalidInput';
+                                    };
+                                ?>" 
+                                name="nativeCountry" id="nativeCountry" aria-label="nativeCountryLabel" value="<?= $nativeCountry ?? ''; ?>" required>
                                     <option>Choisissez un pays</option>
                                 <?php
                                     foreach ($countriesArray as $countrieKey => $countrieValue) { 
@@ -219,7 +241,13 @@
                             </p>
                             <!-- Formulaire : Code postal -->
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="Code Postal" required size="5" pattern="<?= CONSTANT_REGEX_POSTAL_CODE; ?> value="<?= $postalCode ?? ''; ?>" autocomplete="postal-code">
+                                <input type="text" class="form-control
+                                <?php
+                                    if(!empty($error['postalCode'])) {
+                                        echo 'invalidInput';
+                                    };
+                                ?>" 
+                                id="postalCode" name="postalCode" placeholder="Code Postal" required size="5" pattern="<?= CONSTANT_REGEX_POSTAL_CODE; ?>" value="<?= $postalCode ?? ''; ?>" autocomplete="postal-code">
                                 <label for="postalCode">Code Postal *</label>
                             </div>
                             <div class="error">
@@ -241,9 +269,17 @@
                                 foreach ($levelStudyArray as $levelStudyKey => $levelStudyValue) {
                             ?>
                             <div class="form-check form-check-inline mb-3">
-                                <input class="form-check-input" type="radio" name="levelStudy" id="<?= $levelStudyKey; ?>LevelStudy"  value="<?= $levelStudy ?? $levelStudyValue; ?>"
+                                <input class="form-check-input
+                                <?php
+                                    if(!empty($error['levelStudy'])) {
+                                        echo 'invalidInput';
+                                    };
+                                ?>" 
+                                type="radio" name="levelStudy" id="<?= $levelStudyKey; ?>LevelStudy" required value="<?= $levelStudy ?? $levelStudyValue; ?>"
                                 <?php
                                     if(!empty($levelStudy) && ($levelStudyValue == $levelStudy)) {
+                                        echo 'checked="checked"';
+                                    } elseif ($levelStudyValue == $levelStudyArray['without']) {
                                         echo 'checked="checked"';
                                     };
                                 ?>
@@ -285,13 +321,19 @@
                             <p class="error">
                                 <?=  $error['webLanguages'] ?? '' ?>
                             </p>
-                            <!-- Formulaire : Expérience -->
+                            <!-- Formulaire : Experience -->
                             <div class="mb-3">
-                                <label for="commentsExpérience" class="commentsExpérience">Avez vous déjà eu une expérience dans la programmation et/ou l'informatique avant de remplir ce formulaire ? *</label>
-                                <textarea class="form-control" placeholder="Précisez" name="commentsExpérience" id="commentsExpérience" required><?= $commentsExpérience ?? ''; ?></textarea>
+                                <label for="commentsExperience" class="commentsExperience">Avez vous déjà eu une experience dans la programmation et/ou l'informatique avant de remplir ce formulaire ? *</label>
+                                <textarea class="form-control
+                                <?php
+                                    if(!empty($error['commentsExperience'])) {
+                                        echo 'invalidInput';
+                                    };
+                                ?>" 
+                                placeholder="Précisez" name="commentsExperience" id="commentsExperience" required><?= $commentsExperience ?? ''; ?></textarea>
                             </div>
                             <p class="error">
-                            <?=  $error['commentsExpérience'] ?? '' ?>
+                            <?=  $error['commentsExperience'] ?? '' ?>
                             </p>
                         </div>
                     </div>
@@ -311,17 +353,18 @@
                 <p>Date de naissance : <?= $birthDate; ?></p>
                 <p>Pays de naissance : <?= $nativeCountry; ?></p>
                 <p>Code postal : <?= $postalCode; ?></p>
-                <p>Photo de profil : <?= $profilePicture ?? 'Non indiqué'; ?></p>
+                <p>Photo de profil : <?= $profilePicture ?? 'Non indiqué'; ?> <a href="/uploads/<?= $lastname.'-'.$birthDate.'.'.$extension ?>">lien ici</a></p>
                 <p>Niveau d'études : <?= $levelStudy; ?></p>
                 <p>Compte LinkedIn : <?= $linkedinUrl ?? 'Non indiqué'; ?></p>
                 <p>Langage(s) web connu(s) : <?php
                     foreach ($webLanguages as $webLanguagesKey => $webLanguagesValue) { 
-                        echo $webLanguagesValue.', ' ?? 'Non indiqué';
+                        echo $webLanguagesValue.' - ' ?? 'Non indiqué';
                     };
                 ?></p>
-                <p>Expérience : <?= $commentsExpérience; ?></p>
+                <p>Experience : <?= $commentsExperience; ?></p>
                 <?php }; ?>
             </div>
         </div>
     </div>
+</body>
 </html>
