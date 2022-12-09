@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,15 +9,16 @@
     <link rel="stylesheet" href="/public/assets/css/style.css">
     <title>Formulaire d'inscription</title>
 </head>
+
 <body>
     <div class="container-fluid">
         <div class="row justify-content-center">
-            <div class="col-8 my-5 py-5">
+            <div class="col-8 my-3 py-3">
                 <h1>Partie 10 - Les Formulaires</h1>
             </div>
-            <div class="col-8 mb-5 py-5">
-                <h3>Formulaire d'inscription</h3>
+            <div class="col-8 mb-3 py-3">
+                <h2 class="text-center">Formulaire d'inscription</h2>
             </div>
         </div>
         <div class="row justify-content-center">
-            <div class="col-8 mb-5">
+            <div class="col-8 mb-3">
